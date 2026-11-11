@@ -1,6 +1,6 @@
 # CardScanner
 
-[![](https://jitpack.io/v/amirezafahimi/cardscanner.svg)](https://jitpack.io/#amirezafahimi/cardscanner)
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.amirezafahimi/cardscanner.svg?label=Maven%20Central)](https://central.sonatype.com/artifact/io.github.amirezafahimi/cardscanner)
 [![API](https://img.shields.io/badge/API-23%2B-brightgreen.svg)](https://android-arsenal.com/api?level=23)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
 
@@ -35,40 +35,11 @@ deals with that:
 
 ## Installation
 
-### Gradle (JitPack)
-
-Add JitPack to your repositories. In `settings.gradle.kts`:
-
-```kotlin
-dependencyResolutionManagement {
-    repositories {
-        google()
-        mavenCentral()
-        maven { url = uri("https://jitpack.io") }
-    }
-}
-```
-
-<details>
-<summary>Groovy (<code>settings.gradle</code>)</summary>
-
-```groovy
-dependencyResolutionManagement {
-    repositories {
-        google()
-        mavenCentral()
-        maven { url 'https://jitpack.io' }
-    }
-}
-```
-
-</details>
-
-Then add the dependency to your module:
+### Gradle
 
 ```kotlin
 dependencies {
-    implementation("com.github.amirezafahimi:cardscanner:1.0.0")
+    implementation("io.github.amirezafahimi:cardscanner:1.0.0")
 }
 ```
 
@@ -77,11 +48,14 @@ dependencies {
 
 ```groovy
 dependencies {
-    implementation 'com.github.amirezafahimi:cardscanner:1.0.0'
+    implementation 'io.github.amirezafahimi:cardscanner:1.0.0'
 }
 ```
 
 </details>
+
+It is on Maven Central, so no extra repository is needed as long as `mavenCentral()` is in your
+`settings.gradle.kts` — which it is in every project the Android Studio template generates.
 
 ### Version catalog
 
@@ -90,7 +64,7 @@ dependencies {
 cardscanner = "1.0.0"
 
 [libraries]
-cardscanner = { module = "com.github.amirezafahimi:cardscanner", version.ref = "cardscanner" }
+cardscanner = { module = "io.github.amirezafahimi:cardscanner", version.ref = "cardscanner" }
 ```
 
 ### Requirements
@@ -307,6 +281,10 @@ The `:sample` module is a one-screen app that opens the scanner and prints the r
 ./gradlew :cardscanner:test              # unit tests for the extraction logic
 ./gradlew :cardscanner:publishToMavenLocal
 ```
+
+## Releasing
+
+Maven Central setup and the release checklist live in [PUBLISHING.md](PUBLISHING.md).
 
 ## Contributing
 

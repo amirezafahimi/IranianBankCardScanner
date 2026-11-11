@@ -1,12 +1,13 @@
+import com.vanniktech.maven.publish.AndroidSingleVariantLibrary
+
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.compose.compiler)
-    `maven-publish`
+    alias(libs.plugins.maven.publish)
+    alias(libs.plugins.dokka)
+    alias(libs.plugins.dokka.javadoc)
 }
-
-group = "com.github.amirezafahimi"
-version = "1.0.0"
 
 android {
     namespace = "io.github.amirezafahimi.cardscanner"
@@ -28,12 +29,6 @@ android {
 
     kotlinOptions {
         jvmTarget = libs.versions.jvmTarget.get()
-    }
-
-    publishing {
-        singleVariant("release") {
-            withSourcesJar()
-        }
     }
 }
 
@@ -61,45 +56,59 @@ dependencies {
     testImplementation(libs.truth)
 }
 
-publishing {
-    publications {
-        register<MavenPublication>("release") {
-            groupId = "com.github.amirezafahimi"
-            artifactId = "cardscanner"
-            version = project.version.toString()
+mavenPublishing {
+    // Publishes the release variant with a sources jar and a Dokka-generated javadoc jar.
+    // Maven Central rejects a deployment that is missing either one.
+    configure(
+        AndroidSingleVariantLibrary(
+            variant = "release",
+            sourcesJar = true,
+            publishJavadocJar = true
+        )
+    )
 
-            afterEvaluate {
-                from(components["release"])
+    coordinates(
+        groupId = "io.github.amirezafahimi",
+        artifactId = "cardscanner",
+        version = "1.0.0"
+    )
+
+    // Uploads to the Central Portal and stops there: the deployment then waits in
+    // https://central.sonatype.com/publishing/deployments for you to press Publish.
+    // Pass automaticRelease = true once you trust the pipeline.
+    publishToMavenCentral()
+
+    // Every file needs a detached PGP signature. Keys come from gradle.properties or, in CI,
+    // from the ORG_GRADLE_PROJECT_signingInMemoryKey environment variable. See PUBLISHING.md.
+    signAllPublications()
+
+    pom {
+        name.set("CardScanner")
+        description.set(
+            "Jetpack Compose bank card scanner for Android: CameraX + ML Kit OCR with " +
+                "Luhn and IIN validation, tuned for Iranian bank cards."
+        )
+        inceptionYear.set("2026")
+        url.set("https://github.com/amirezafahimi/cardscanner")
+
+        licenses {
+            license {
+                name.set("The Apache License, Version 2.0")
+                url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
+                distribution.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
             }
-
-            pom {
-                name.set("CardScanner")
-                description.set(
-                    "Jetpack Compose bank card scanner for Android: CameraX + ML Kit OCR with " +
-                        "Luhn and IIN validation, tuned for Iranian bank cards."
-                )
-                url.set("https://github.com/amirezafahimi/cardscanner")
-
-                licenses {
-                    license {
-                        name.set("The Apache License, Version 2.0")
-                        url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
-                        distribution.set("repo")
-                    }
-                }
-                developers {
-                    developer {
-                        id.set("amirezafahimi")
-                        name.set("Amirreza Fahimi")
-                        url.set("https://github.com/amirezafahimi")
-                    }
-                }
-                scm {
-                    url.set("https://github.com/amirezafahimi/cardscanner")
-                    connection.set("scm:git:git://github.com/amirezafahimi/cardscanner.git")
-                    developerConnection.set("scm:git:ssh://git@github.com/amirezafahimi/cardscanner.git")
-                }
+        }
+        developers {
+            developer {
+                id.set("amirezafahimi")
+                name.set("Amirreza Fahimi")
+                url.set("https://github.com/amirezafahimi")
             }
+        }
+        scm {
+            url.set("https://github.com/amirezafahimi/cardscanner")
+            connection.set("scm:git:git://github.com/amirezafahimi/cardscanner.git")
+            developerConnection.set("scm:git:ssh://git@github.com/amirezafahimi/cardscanner.git")
         }
     }
 }
