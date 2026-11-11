@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="card_scanner_camera_permission_title">مجوز دوربین</string>
+    <string name="card_scanner_camera_permission_message">لطفا برای اسکن کارت، مجوز استفاده از دوربین را تأیید کنید.</string>
+    <string name="card_scanner_camera_permission_settings_message">شما اجازه دسترسی به دوربین را رد کرده‌اید. برای اسکن کارت بانکی، مجوز دوربین را از قسمت تنظیمات فعال کنید.</string>
+    <string name="card_scanner_go_to_settings">رفتن به تنظیمات</string>
+    <string name="card_scanner_confirm">تایید</string>
+    <string name="card_scanner_cancel">انصراف</string>
+
+    <string name="card_scanner_overlay_title">لطفا کارت خود را روبروی دوربین قرار دهید.</string>
+    <string name="card_scanner_overlay_subtitle">دقت کنید که شماره کارت واضح باشد.</string>
+
+    <string name="card_scanner_close">بستن</string>
+    <string name="card_scanner_toggle_torch">چراغ قوه</string>
+
+</resources>

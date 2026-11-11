@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="card_scanner_camera_permission_title">Camera permission</string>
+    <string name="card_scanner_camera_permission_message">Please allow camera access to scan your card.</string>
+    <string name="card_scanner_camera_permission_settings_message">Camera access was denied. Enable the camera permission in Settings to scan your card.</string>
+    <string name="card_scanner_go_to_settings">Go to settings</string>
+    <string name="card_scanner_confirm">Confirm</string>
+    <string name="card_scanner_cancel">Cancel</string>
+
+    <string name="card_scanner_overlay_title">Hold your card in front of the camera.</string>
+    <string name="card_scanner_overlay_subtitle">Make sure the card number is clearly visible.</string>
+
+    <string name="card_scanner_close">Close</string>
+    <string name="card_scanner_toggle_torch">Toggle torch</string>
+
+</resources>
