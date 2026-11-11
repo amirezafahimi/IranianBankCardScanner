@@ -2,7 +2,7 @@
 
 [![](https://jitpack.io/v/amirezafahimi/cardscanner.svg)](https://jitpack.io/#amirezafahimi/cardscanner)
 [![API](https://img.shields.io/badge/API-23%2B-brightgreen.svg)](https://android-arsenal.com/api?level=23)
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
 
 A Jetpack Compose bank card scanner for Android. Point the camera at a card and get the card number
 — and optionally the expiry date — back as a `ScannedCard`.
@@ -276,6 +276,20 @@ Nothing to do: the library ships `consumer-rules.pro` with the keep rules ML Kit
 
 ---
 
+## Third-party licenses
+
+CardScanner itself is Apache 2.0, and so are CameraX, Compose, AndroidX and the Kotlin
+coroutines artifacts it pulls in.
+
+One dependency is not: **`com.google.mlkit:text-recognition` is governed by the
+[ML Kit Terms of Service](https://developers.google.com/ml-kit/terms)**, not by the Apache License.
+Recognition runs entirely on the device — this library sends no image or card data anywhere and
+stores none of it — but if your legal review tracks dependency terms, that is the one to flag.
+
+The full list is in [NOTICE](NOTICE).
+
+---
+
 ## Sample app
 
 The `:sample` module is a one-screen app that opens the scanner and prints the result:
@@ -302,9 +316,20 @@ Issues and pull requests are welcome. Adding an issuer prefix to `defaultIinList
 ## License
 
 ```
-MIT License
+Copyright 2026 Amirreza Fahimi
 
-Copyright (c) 2026 Amirreza Fahimi
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
 ```
 
-See [LICENSE](LICENSE) for the full text.
+First developed as an internal component of the Hafhashtad (780) Android application and published
+with that project's permission. See [LICENSE](LICENSE) and [NOTICE](NOTICE).

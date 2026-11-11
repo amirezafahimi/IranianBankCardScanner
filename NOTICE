@@ -1,0 +1,43 @@
+CardScanner
+Copyright 2026 Amirreza Fahimi
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+--------------------------------------------------------------------------------
+
+This product was first developed as an internal component of the Hafhashtad
+(780) Android application and is published here with that project's permission.
+
+--------------------------------------------------------------------------------
+
+THIRD-PARTY COMPONENTS
+
+This library depends on the following components, which carry their own terms.
+Consumers of this library are bound by those terms as well.
+
+  Apache License 2.0 (http://www.apache.org/licenses/LICENSE-2.0)
+    - AndroidX CameraX (androidx.camera:camera-core, camera-camera2,
+      camera-lifecycle, camera-view)
+    - AndroidX Core, Activity, Lifecycle
+    - Jetpack Compose (androidx.compose.ui, foundation, material3,
+      material-icons-extended)
+    - Kotlin and kotlinx.coroutines (JetBrains s.r.o.)
+
+  Google ML Kit Terms of Service (https://developers.google.com/ml-kit/terms)
+    - com.google.mlkit:text-recognition
+
+      ML Kit text recognition runs entirely on the device: this library sends no
+      image or card data off the device and stores none of it. The dependency is
+      nonetheless governed by Google's ML Kit Terms of Service rather than by the
+      Apache License, and by Google's Privacy Policy
+      (https://policies.google.com/privacy).
