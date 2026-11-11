@@ -6,7 +6,6 @@ plugins {
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.maven.publish)
     alias(libs.plugins.dokka)
-    alias(libs.plugins.dokka.javadoc)
 }
 
 android {
