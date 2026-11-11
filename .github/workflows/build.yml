@@ -26,3 +26,17 @@ jobs:
 
       - name: Assemble library
         run: ./gradlew :cardscanner:assembleRelease
+
+      # Maven Central rejects a deployment without a javadoc jar, and Dokka — which generates it —
+      # only runs during publishing. Building it here means a broken javadoc jar surfaces on an
+      # ordinary push instead of halfway through a release.
+      #
+      # Both Dokka output formats are built because the javadoc jar is wired to one of them
+      # depending on the publish plugin's version; they share the same Dokka pipeline over the same
+      # source set, so this covers the jar either way.
+      - name: Javadoc jar
+        run: ./gradlew :cardscanner:dokkaJavadoc :cardscanner:dokkaHtml
+
+      - name: List the Dokka and publishing tasks
+        if: failure()
+        run: ./gradlew :cardscanner:tasks --all | grep -iE 'dokka|javadoc|publish' || true
