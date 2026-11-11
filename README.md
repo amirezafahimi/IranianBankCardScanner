@@ -1,32 +1,48 @@
-# CardScanner
+# Iranian Bank Card Scanner
 
-[![Maven Central](https://img.shields.io/maven-central/v/io.github.amirezafahimi/IranianBankCardScanner.svg?label=Maven%20Central)](https://central.sonatype.com/artifact/io.github.amirezafahimi/IranianBankCardScanner)
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.amirezafahimi/cardscanner.svg?label=Maven%20Central)](https://central.sonatype.com/artifact/io.github.amirezafahimi/cardscanner)
 [![API](https://img.shields.io/badge/API-23%2B-brightgreen.svg)](https://android-arsenal.com/api?level=23)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
 
-A Jetpack Compose bank card scanner for Android. Point the camera at a card and get the card number
-— and optionally the expiry date — back as a `ScannedCard`.
+A Jetpack Compose card scanner for **Iranian bank cards** (کارت‌های بانکی ایران). Point the camera
+at a Shetab card and get the 16-digit card number — and optionally the Solar Hijri expiry date —
+back as a `ScannedCard`.
+
+It is built for the Iranian payment network specifically, not adapted to it as an afterthought:
+
+- **55 Shetab issuer prefixes** are the default allow-list (six-digit IINs, plus a few eight-digit
+  ones where a bank splits a range), so a number is only accepted when it actually belongs to an
+  Iranian bank.
+- **Solar Hijri (Jalali) expiry dates** in the `YY/MM` order Iranian cards print, not just the
+  Gregorian `MM/YY` the rest of the world uses.
+- **Persian strings and RTL** ship with the library, so the scanner looks native in a Persian app
+  without you writing a single resource.
+- **Iranian card layout quirks** are handled: the 24-digit Sheba (IBAN) printed beside the number is
+  rejected, and dates written in Persian or Arabic-Indic digits are ignored, since those come from
+  the printed Persian face of the card rather than the embossed expiry.
 
 Built on **CameraX** and **ML Kit** on-device text recognition. Nothing leaves the device: no
 network calls, no analytics, no card data stored anywhere.
 
-Tuned for Iranian bank cards (Shetab IINs and Solar Hijri expiry dates out of the box), but the
-issuer list is a constructor parameter, so it works for any 16-digit card.
+It is not locked to Iran — `iinList` is a config property, so passing your own prefixes (or
+`emptyList()`) makes it a general scanner for any 16-digit Luhn-valid card. The defaults are simply
+Iranian.
 
 ---
 
 ## Why not just read the OCR output?
 
 OCR on an embossed card is noisy. A frame can read `6O37` instead of `6037`, split the number into
-groups ML Kit returns out of order, or pick up the 24-digit IBAN printed next to it. CardScanner
-deals with that:
+groups ML Kit returns out of order, or pick up the 24-digit Sheba number printed next to it.
+CardScanner deals with that:
 
 - **Character repair** — letters that OCR confuses with digits (`O`→`0`, `S`→`5`, `B`→`8`, …) are
   mapped back before anything is parsed.
 - **Row reconstruction** — recognised lines are grouped by their vertical center and sorted left to
   right, so the four digit groups of the number end up adjacent in the text.
 - **Luhn + IIN validation** — a candidate is only considered if its checksum is valid *and* it
-  starts with a known issuer prefix. 24-digit IBANs and phone numbers are rejected.
+  starts with a known Shetab issuer prefix. The 24-digit Sheba number and phone numbers printed on
+  the same card are rejected.
 - **Frame voting** — a number must be read identically in several frames before it is reported, with
   a timeout fallback so a worn card still scans.
 - **Reversed-row retry** — cards read bottom-up are retried with their digit groups reversed.
@@ -121,9 +137,9 @@ composition, so dismiss it from that callback.
 
 ```kotlin
 data class ScannedCard(
-    val number: String,      // 16 digits, no separators
-    val expiryMonth: String?, // "05", or null when expiry scanning is off
-    val expiryYear: String?   // "08", or null
+    val number: String,       // 16 digits, no separators
+    val expiryMonth: String?, // "08", or null when expiry scanning is off
+    val expiryYear: String?   // "05" — Solar Hijri, i.e. 1405. Null when scanning is off.
 )
 ```
 
@@ -146,7 +162,7 @@ CardScannerScreen(
 
 | Property | Default | Meaning |
 |---|---|---|
-| `iinList` | `defaultIinList` (Iranian banks) | Accepted card prefixes. Pass `emptyList()` to accept any Luhn-valid number. |
+| `iinList` | `defaultIinList` — 55 Shetab prefixes | Accepted card prefixes. Pass `emptyList()` to accept any Luhn-valid number. |
 | `scanExpiryDate` | `true` | Read the expiry date along with the number. |
 | `analyzeIntervalMs` | `500` | Minimum delay between two OCR passes. |
 | `requiredScore` | `2` | Frames that must agree before a number is reported. |
@@ -213,10 +229,16 @@ else.
 
 ---
 
-## Localization
+## Persian and localization
 
-The library ships English (default) and Persian (`values-fa`) strings and is RTL-ready. Override any
-string by redeclaring its name in your app's `strings.xml`:
+The library ships Persian (`values-fa`) alongside English and is RTL-ready, so in an app running on
+a Persian device the scanner's instructions and permission dialog appear in Persian with no setup.
+
+English is the `values/` default only because that is what a base resource folder is for — the
+fallback when the device locale matches nothing. It is not the primary target; Persian is a
+first-class translation, not a courtesy one.
+
+Override any string by redeclaring its name in your app's `strings.xml`:
 
 ```xml
 <string name="card_scanner_overlay_title">Position your card in the frame</string>
@@ -237,10 +259,21 @@ typography, no extra setup needed.
 
 ### Expiry date format
 
-`extractExpiryDate` accepts both `YY/MM` (how Iranian cards print their Solar Hijri expiry) and
-`MM/YY`, resolving the ambiguity by range. It returns the month and the year as two separate two-digit
-strings, and rejects dates written in Persian or Arabic-Indic digits, since those come from the
-printed Persian side of the card rather than the embossed date.
+Iranian cards print their expiry as a **Solar Hijri (Jalali)** date in `YY/MM` order — `05/08` on an
+Iranian card means month 08 of year 1405, the reverse of what the same two numbers mean on a Visa.
+
+`extractExpiryDate` accepts both orders and resolves the ambiguity by range. When a date could be
+read either way — `05/08`, where both parts are in `1..12` — it prefers the Iranian `YY/MM` reading,
+giving month `08` of year `05`. It falls back to `MM/YY` only when the first part is a valid month
+and the second cannot be one.
+
+It returns `(month, year)` as two two-digit strings, exactly as printed: **no conversion to
+Gregorian is performed**, so if your backend expects a Gregorian expiry you have to convert the
+Jalali year yourself.
+
+Dates written in Persian or Arabic-Indic digits (`۰۵/۰۸`) are rejected on purpose: on an Iranian
+card those belong to the printed Persian face, not to the embossed expiry, and reading them picks up
+the wrong date.
 
 ---
 

@@ -82,10 +82,11 @@ mavenPublishing {
     signAllPublications()
 
     pom {
-        name.set("CardScanner")
+        name.set("Iranian Bank Card Scanner")
         description.set(
-            "Jetpack Compose bank card scanner for Android: CameraX + ML Kit OCR with " +
-                "Luhn and IIN validation, tuned for Iranian bank cards."
+            "Jetpack Compose scanner for Iranian bank cards on Android: CameraX + ML Kit " +
+                "on-device OCR, with Shetab IIN and Luhn validation, Solar Hijri expiry dates " +
+                "and Persian/RTL strings built in."
         )
         inceptionYear.set("2026")
         url.set("https://github.com/amirezafahimi/IranianBankCardScanner")
