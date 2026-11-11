@@ -309,5 +309,4 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ```
 
-First developed as an internal component of the Hafhashtad (780) Android application and published
-with that project's permission. See [LICENSE](LICENSE) and [NOTICE](NOTICE).
+See [LICENSE](LICENSE) and [NOTICE](NOTICE).
