@@ -89,7 +89,7 @@ mavenPublishing {
                 "Luhn and IIN validation, tuned for Iranian bank cards."
         )
         inceptionYear.set("2026")
-        url.set("https://github.com/amirezafahimi/cardscanner")
+        url.set("https://github.com/amirezafahimi/IranianBankCardScanner")
 
         licenses {
             license {
@@ -106,9 +106,9 @@ mavenPublishing {
             }
         }
         scm {
-            url.set("https://github.com/amirezafahimi/cardscanner")
-            connection.set("scm:git:git://github.com/amirezafahimi/cardscanner.git")
-            developerConnection.set("scm:git:ssh://git@github.com/amirezafahimi/cardscanner.git")
+            url.set("https://github.com/amirezafahimi/IranianBankCardScanner")
+            connection.set("scm:git:git://github.com/amirezafahimi/IranianBankCardScanner.git")
+            developerConnection.set("scm:git:ssh://git@github.com/amirezafahimi/IranianBankCardScanner.git")
         }
     }
 }

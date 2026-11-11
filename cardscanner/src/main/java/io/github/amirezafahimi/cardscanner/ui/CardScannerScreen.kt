@@ -75,8 +75,11 @@ import io.github.amirezafahimi.cardscanner.model.CardScannerConfig
 import io.github.amirezafahimi.cardscanner.model.ScannedCard
 import io.github.amirezafahimi.cardscanner.utils.CardScannerCameraPermissionStore
 import io.github.amirezafahimi.cardscanner.utils.resolveCameraPermissionDialogState
+import kotlinx.coroutines.suspendCancellableCoroutine
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
 
 /**
  * Full screen bank card scanner.
@@ -276,7 +279,7 @@ fun CardScannerScreen(
             LaunchedEffect(Unit) {
                 // Suspending await: if the composable leaves before the provider resolves, the
                 // cancelled LaunchedEffect never reaches bindToLifecycle.
-                val provider = ProcessCameraProvider.awaitInstance(context)
+                val provider = awaitCameraProvider(context)
                 cameraProvider = provider
 
                 val resolutionSelector = ResolutionSelector.Builder()
@@ -360,6 +363,31 @@ fun CardScannerScreen(
         }
     }
 }
+
+/**
+ * Awaits the camera provider on the calling coroutine.
+ *
+ * CameraX only offers a `ListenableFuture` here before 1.5, and a suspending wrapper is what keeps
+ * the camera from being bound after the scanner is gone: a cancelled caller cancels the future
+ * instead of binding to a dead lifecycle.
+ */
+private suspend fun awaitCameraProvider(context: Context): ProcessCameraProvider =
+    suspendCancellableCoroutine { continuation ->
+        val future = ProcessCameraProvider.getInstance(context)
+
+        future.addListener(
+            {
+                try {
+                    continuation.resume(future.get())
+                } catch (e: Exception) {
+                    continuation.resumeWithException(e)
+                }
+            },
+            ContextCompat.getMainExecutor(context)
+        )
+
+        continuation.invokeOnCancellation { future.cancel(false) }
+    }
 
 private fun MeteringPoint.toFocusAction(): FocusMeteringAction =
     FocusMeteringAction

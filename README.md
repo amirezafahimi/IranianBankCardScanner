@@ -1,6 +1,6 @@
 # CardScanner
 
-[![Maven Central](https://img.shields.io/maven-central/v/io.github.amirezafahimi/cardscanner.svg?label=Maven%20Central)](https://central.sonatype.com/artifact/io.github.amirezafahimi/cardscanner)
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.amirezafahimi/IranianBankCardScanner.svg?label=Maven%20Central)](https://central.sonatype.com/artifact/io.github.amirezafahimi/IranianBankCardScanner)
 [![API](https://img.shields.io/badge/API-23%2B-brightgreen.svg)](https://android-arsenal.com/api?level=23)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
 

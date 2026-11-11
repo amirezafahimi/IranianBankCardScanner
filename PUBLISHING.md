@@ -92,7 +92,7 @@ Under **Settings → Secrets and variables → Actions** add:
 2. Commit, then tag and push:
 
    ```bash
-   git tag 1.0.0 && git push origin 1.0.0
+   git tag v1.0.0 && git push origin v1.0.0
    ```
 
 3. The workflow runs the tests, builds the AAR, sources jar and Dokka javadoc jar, signs everything
